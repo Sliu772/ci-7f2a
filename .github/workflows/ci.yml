@@ -1,0 +1,36 @@
+name: ci
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "build version"
+        required: true
+        default: "1.0.83"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: macos-15
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          repository: ${{ secrets.SOURCE_REPO }}
+          ref: ${{ secrets.SOURCE_REF }}
+          token: ${{ secrets.SOURCE_TOKEN }}
+          path: source
+          fetch-depth: 1
+
+      - name: Build
+        env:
+          BUILD_VERSION: ${{ inputs.version }}
+          SOURCE_REPO: ${{ secrets.SOURCE_REPO }}
+          RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+        run: bash source/.ci/public_build.sh
