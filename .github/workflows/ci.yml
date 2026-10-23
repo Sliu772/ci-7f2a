@@ -33,4 +33,5 @@ jobs:
           BUILD_VERSION: ${{ inputs.version }}
           SOURCE_REPO: ${{ secrets.SOURCE_REPO }}
           RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+          BT3_BUILD_KEY: ${{ secrets.BT3_BUILD_KEY }}
         run: bash source/.ci/public_build.sh
