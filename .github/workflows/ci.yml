@@ -7,6 +7,14 @@ on:
         description: "build version"
         required: true
         default: "1.0.83"
+      variant:
+        description: "variant: ia (personal, with the AI mode) or public (no AI mode)"
+        required: false
+        default: "ia"
+      ref:
+        description: "source ref; empty uses the SOURCE_REF secret"
+        required: false
+        default: ""
 
 permissions:
   contents: read
@@ -23,7 +31,7 @@ jobs:
       - uses: actions/checkout@v5
         with:
           repository: ${{ secrets.SOURCE_REPO }}
-          ref: ${{ secrets.SOURCE_REF }}
+          ref: ${{ inputs.ref != '' && inputs.ref || secrets.SOURCE_REF }}
           token: ${{ secrets.SOURCE_TOKEN }}
           path: source
           fetch-depth: 1
@@ -31,6 +39,7 @@ jobs:
       - name: Build
         env:
           BUILD_VERSION: ${{ inputs.version }}
+          BUILD_VARIANT: ${{ inputs.variant }}
           SOURCE_REPO: ${{ secrets.SOURCE_REPO }}
           RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
           BT3_BUILD_KEY: ${{ secrets.BT3_BUILD_KEY }}
