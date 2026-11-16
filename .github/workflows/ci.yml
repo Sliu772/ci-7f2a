@@ -20,7 +20,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: ci
+  group: ci-${{ inputs.version }}
   cancel-in-progress: false
 
 jobs:
